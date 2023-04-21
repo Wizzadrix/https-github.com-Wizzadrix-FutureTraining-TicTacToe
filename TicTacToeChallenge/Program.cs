@@ -89,7 +89,7 @@ namespace TicTacToeChallenge
         }
 
         //Looks for a number to replace with "X" or "O". If no such number can be found, return false
-        public static bool ReplaceValueOnBoard(string[,] board, string number)
+        public static void ReplaceValueOnBoard(string[,] board, string number)
         {
             //If the input is invalid, try again with different (hopefully correct) input
             string newInput = number;
@@ -124,44 +124,36 @@ namespace TicTacToeChallenge
                         if (!CheckFieldOccupied(board[i, j]))
                         {
                             board[i, j] = currentPlayer;
+                            DrawNewBoard(board);
+                            //break; //stop when valid field was found and replaced with X or O
                         }
                         else //field already has a "X" or an "O"
                         {
                             newInput = Console.ReadLine();
                             ReplaceValueOnBoard(board, newInput);
+                        }
 
+                        //Check if the game is over
+                        if (CheckWinner(board))
+                        {
 
-                            //Check if the game is over
-                            if (CheckWinner(board))
+                            var winner = "";
+                            if (isPlayerOneActive)
+                                winner = "X";
+                            else
+                                winner = "O";
+
+                            if (isPlayerOneActive)
                             {
+                                Console.WriteLine("Congratulations player {0}, you have won the game !", winner);
 
-                                var winner = "";
-                                if (isPlayerOneActive)
-                                    winner = "X";
-                                else
-                                    winner = "O";
-
-                                if (isPlayerOneActive)
-                                {
-                                    Console.WriteLine("Congratulations player {0}, you have won the game !", winner);
-
-                                    //Ask for a new game
-                                    AskForRematch();
-                                }
-
+                                //Ask for a new game
+                                AskForRematch();
                             }
-
-                            DrawNewBoard(board);
                         }
                     }
-
-                    //field to set X or O has been found
-                    return true;
                 }
-
             }
-            //No such field exists
-            return false;
         }
 
         //Returns true if field is "free" (number) otherwise false
